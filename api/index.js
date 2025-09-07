@@ -135,7 +135,7 @@ app.post("/login", (req, res) => {
           <body>
             <div class="error-card">
               <h2>❌ Invalid credentials</h2>
-              <img class="rickroll-gif" src="https://media.tenor.com/4KJXvtrr98cAAAAd/rickroll.gif" alt="Rickroll GIF"><br>
+              <img class="rickroll-gif" src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTRjYjdobXVtanE1bTcweWoyZWVmaDZocnl0NXh6dWE5czNwbDViYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/YExAAySmC0I9u2TjKJ/giphy.gif" alt="Rickroll GIF"><br>
               <div><a href="/">Try Again</a></div>
             </div>
           </body>
