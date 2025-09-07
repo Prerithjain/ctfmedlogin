@@ -5,14 +5,14 @@ const sqlite3 = require("sqlite3").verbose();
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// In-memory SQLite setup: resets every function invocation (stateless)
+// In-memory SQLite setup: resets on each function call
 const db = new sqlite3.Database(":memory:");
 db.serialize(() => {
   db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT)");
   db.run("INSERT OR IGNORE INTO users (id, username, password) VALUES (1, 'admin', 'supersecret')");
 });
 
-// Show login form
+// Login form
 app.get("/", (req, res) => {
   res.send(`
     <html>
@@ -25,7 +25,6 @@ app.get("/", (req, res) => {
             min-height: 100vh;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            transition: background 0.5s;
           }
           .login-box {
             background: #fff9;
@@ -38,18 +37,15 @@ app.get("/", (req, res) => {
           input {
             border: none; border-radius: 7px;
             padding: 8px; font-size: 1rem;
+            margin-bottom: 12px; width: 100%;
             transition: box-shadow 0.4s;
-            margin-bottom: 12px;
-            width: 100%;
           }
           input:focus { box-shadow: 0 0 8px #57cdfc; }
           button {
-            background: #57cdfc;
-            color: white; border: none;
-            border-radius: 6px;
+            background: #57cdfc; color: white;
+            border: none; border-radius: 6px;
             padding: 8px 20px; font-weight: bold;
-            font-size: 1rem;
-            transition: background 0.3s;
+            font-size: 1rem; transition: background 0.3s;
           }
           button:hover { background: #3485a6; }
           @keyframes entrance {
@@ -82,7 +78,6 @@ app.post("/login", (req, res) => {
       return res.send(`<html><body><h2>Error: ${err.message}</h2></body></html>`);
     }
     if (row) {
-      // Valid login - show flag with confetti animation
       return res.send(`
         <html>
           <head>
@@ -96,9 +91,7 @@ app.post("/login", (req, res) => {
             <script src="https://cdn.jsdelivr.net/gh/CoderZ90/confetti/confetti.js"></script>
           </head>
           <body>
-            <div class="flagbox">
-              <h2>✅ Welcome!<br>Flag: <b>PhaseShift{you_got_me_now_sV3$s$6}</b></h2>
-            </div>
+            <div class="flagbox"><h2>✅ Welcome!<br>Flag: <b>PhaseShift{you_got_me_now_sV3$s$6}</b></h2></div>
             <script>
               setTimeout(() => { confetti.start(); }, 300);
               setTimeout(() => { confetti.stop(); }, 4000);
@@ -108,7 +101,6 @@ app.post("/login", (req, res) => {
         </html>
       `);
     } else {
-      // Invalid login - show Rickroll gif + shake effect
       return res.send(`
         <html>
           <head>
