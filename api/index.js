@@ -4,6 +4,7 @@ const sqlite3 = require("sqlite3").verbose();
 const rateLimit = require("express-rate-limit");
 
 const app = express();
+app.set("trust proxy", 1);
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // ✅ Apply rate limiting globally
