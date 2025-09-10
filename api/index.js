@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // ✅ Apply rate limiting globally
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 50, // limit each IP to 50 requests per window
+  max: 5, // limit each IP to 50 requests per window
   message: `
     <html>
       <head>
