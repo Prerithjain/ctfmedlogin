@@ -1,15 +1,58 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const sqlite3 = require("sqlite3").verbose();
+const rateLimit = require("express-rate-limit");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// ✅ Apply rate limiting globally
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50, // limit each IP to 50 requests per window
+  message: `
+    <html>
+      <head>
+        <title>Too Many Requests</title>
+        <style>
+          body {
+            background: #ffefef;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+          }
+          .warnbox {
+            background: #fff8;
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            box-shadow: 0 2px 15px #ff4444cc;
+          }
+          h2 { color: #c33; margin-bottom: 15px; }
+        </style>
+      </head>
+      <body>
+        <div class="warnbox">
+          <h2>⚠️ Rate Limit Reached</h2>
+          <p>Too many requests. Please wait and try again later.</p>
+        </div>
+      </body>
+    </html>
+  `,
+});
+app.use(limiter);
+
 // In-memory SQLite setup: resets on each function call
 const db = new sqlite3.Database(":memory:");
 db.serialize(() => {
-  db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT)");
-  db.run("INSERT OR IGNORE INTO users (id, username, password) VALUES (1, 'admin', 'supersecret')");
+  db.run(
+    "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT)"
+  );
+  db.run(
+    "INSERT OR IGNORE INTO users (id, username, password) VALUES (1, 'admin', 'supersecret')"
+  );
 });
 
 // Login form
