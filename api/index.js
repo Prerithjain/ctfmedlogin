@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // ✅ Apply rate limiting globally
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 10 * 60 * 1000, // 15 minutes
   max: 50, // limit each IP to 50 requests per window
   message: `
     <html>
@@ -37,7 +37,7 @@ const limiter = rateLimit({
       <body>
         <div class="warnbox">
           <h2>⚠️ Rate Limit Reached</h2>
-          <p>Too many requests. Please wait and try again later.</p>
+          <p>Too many requests. Please wait and try again later after 10 min (why brute force...).</p>
         </div>
       </body>
     </html>
